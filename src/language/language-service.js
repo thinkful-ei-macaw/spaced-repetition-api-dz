@@ -36,10 +36,12 @@ const LanguageService = {
     .where({ language_id }).first()
 
   }
-  // getCorrectCount(){
+  getCurrentWord(){
+    
+  }
 
-  // }
-  // getIncorrectCount(){
+  //get word object to compare guess
+
 
   // }
   // trackScore(){
