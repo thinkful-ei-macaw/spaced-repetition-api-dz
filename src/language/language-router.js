@@ -53,6 +53,7 @@ languageRouter
       )
       console.log(nextWord);
       res.json({
+        answer: nextWord.translation,
         nextWord: nextWord.original,
         totalScore: req.language.total_score,
         wordCorrectCount: nextWord.correct_count ,
@@ -71,7 +72,7 @@ languageRouter
   .post(jsonBodyParser, async (req, res, next) => {
    const guess = req.body.guess;
     if(!guess){
-      return res.status(400).send({error: "Missing 'guess' in req.body"})
+      return res.status(400).send({error: "Missing 'guess' in request body"})
     }
     try{
     const words= await LanguageService.getLanguageWords()(
@@ -83,7 +84,7 @@ languageRouter
     let memory_value= head.value.memory_value;
 
 
-    let correct;
+    let isCorrect;
     if(guess===answer){
       correct = true;
       req.language.total_score +=1;
@@ -102,13 +103,15 @@ languageRouter
     }
     let feedback = {
       answer: answer ,
-      correct: correct ,
+      isCorrect: correct ,
       totalScore: req.language.total_score ,
       wordCorrectCount: req.word.correct_count,
       wordIncorrectCount: req.word.incorrect_count
     };
     }
-  
+  catch(error){
+    next(error)
+  }
   })
 
 module.exports = languageRouter

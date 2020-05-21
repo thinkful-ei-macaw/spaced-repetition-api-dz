@@ -58,9 +58,9 @@ const LanguageService = {
     }
 
   }
-  getUpdatedWord(){
-    
-  }
+  // getUpdatedWord(){
+
+  // }
 
   //get word object to compare guess
 
@@ -69,6 +69,6 @@ const LanguageService = {
   // trackScore(){
 
   // }
-}
+
 
 module.exports = LanguageService
