@@ -75,10 +75,18 @@ languageRouter
       return res.status(400).send({error: "Missing 'guess' in request body"})
     }
     try{
-    const words= await LanguageService.getLanguageWords()(
+      console.log(req.body)
+    const words= await LanguageService.getLanguageWords(
       req.app.get('db'),
+      req.language.id
+      
     )
-    let list=await LanguageService.createLinkedList(words)
+    const language= await LanguageService.getUsersLanguage(
+      req.app.get('db'),
+      req.user.id
+      
+    )
+    let list=await LanguageService.createLinkedList(words,language)
     let head=list.head;
     let answer=list.head.value.translation;
     let memory_value= head.value.memory_value;
@@ -103,10 +111,10 @@ languageRouter
     }
     let feedback = {
       answer: answer ,
-      isCorrect: correct ,
+      isCorrect: isCorrect ,
       totalScore: req.language.total_score ,
-      wordCorrectCount: req.word.correct_count,
-      wordIncorrectCount: req.word.incorrect_count
+      wordCorrectCount: head.value.correct_count,
+      wordIncorrectCount: head.value.incorrect_count
     };
     }
   catch(error){
@@ -115,3 +123,4 @@ languageRouter
   })
 
 module.exports = languageRouter
+

@@ -32,8 +32,9 @@ const LanguageService = {
 
  
   createLinkedList(array,language){
+    
     let list = new LinkedList();
-    let curr = array.find(word.id===language.head);
+    let curr = array.find((word) => word.id===language.head);
 
     list.insertLast(curr);
 
@@ -57,8 +58,28 @@ const LanguageService = {
     return wordList.head
     }
 
-  }
-  // getUpdatedWord(){
+  },
+  //write function that takes ll as argument and saves to database
+  update(db,list,user_id){
+   return db.transaction(async(trx)=>{
+     let curr = list.head;
+
+     await trx
+     .into('language')
+     .where({user_id})
+     .update({head:curr.value.id});
+
+     while(curr !== null){
+       await trx
+       .into('word')
+       .where({id: curr.value.id})
+       .update({next})
+     }   curr=curr.next;
+
+   });
+ }
+
+  // getUpdatedWord()
 
   // }
 
