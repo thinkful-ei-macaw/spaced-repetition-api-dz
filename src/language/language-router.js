@@ -67,15 +67,17 @@ languageRouter
 
 languageRouter
   .use(requireAuth)
-  .post(jsonBodyParser,'/guess', async (req, res, next) => {
+  .route('/guess')
+  .post(jsonBodyParser, async (req, res, next) => {
    const guess = req.body.guess;
     if(!guess){
       return res.status(400).send({error: "Missing 'guess' in req.body"})
     }
     try{
-    const guess= await LanguageService.()(
+    const guess= await LanguageService.getLanguageWords()(
       req.app.get('db'),
     )
+    let list=await LanguageService.createLinkedList(words)
     }
     // res.send('implement me!')
   })
