@@ -53,11 +53,13 @@ const LanguageService = {
 
   },
 
-  getCurrentWord(db,words){
-    
-
+  getCurrentWord(wordList){
+    return wordList.head
     }
 
+  }
+  getUpdatedWord(){
+    
   }
 
   //get word object to compare guess
