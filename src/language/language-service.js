@@ -56,9 +56,9 @@ const LanguageService = {
 
   getCurrentWord(wordList){
     return wordList.head
-    }
+    },
 
-  },
+  
   //write function that takes ll as argument and saves to database
   update(db,list,user_id){
    return db.transaction(async(trx)=>{
@@ -69,27 +69,17 @@ const LanguageService = {
      .where({user_id})
      .update({head:curr.value.id});
 
-     while(curr !== null){
+     while(curr){console.log(curr.next)
        await trx
        .into('word')
        .where({id: curr.value.id})
-       .update({next})
-     }   curr=curr.next;
+       .update({next:(curr.next ? curr.next.value.id : knex.raw('DEFAULT'))})
+       curr=curr.next;
+     }   
+     
 
    });
  }
-
-  // getUpdatedWord()
-
-  // }
-
-  //get word object to compare guess
-
-
-  // }
-  // trackScore(){
-
-  // }
-
+}
 
 module.exports = LanguageService

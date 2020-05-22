@@ -116,6 +116,13 @@ languageRouter
       wordCorrectCount: head.value.correct_count,
       wordIncorrectCount: head.value.incorrect_count
     };
+    await LanguageService.update(
+      req.app.get('db'),
+      list,
+      req.language.id,
+      req.language.total_score
+    )
+    res.json({feedback})
     }
   catch(error){
     next(error)
@@ -123,4 +130,3 @@ languageRouter
   })
 
 module.exports = languageRouter
-
