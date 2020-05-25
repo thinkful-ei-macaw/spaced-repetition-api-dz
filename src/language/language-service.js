@@ -38,7 +38,8 @@ const LanguageService = {
 
     list.insertLast(curr);
 
-    while(curr.next !== null){
+    // while(curr.next !== null){
+    while(curr.next){
       curr=array.find(word =>word.id===curr.next);
       list.insertLast(curr)
     }
@@ -75,7 +76,7 @@ const LanguageService = {
        .where({id: curr.value.id})
        .update({next:(curr.next ? curr.next.value.id : knex.raw('DEFAULT'))})
        curr=curr.next;
-     }   
+     }
      
 
    });
