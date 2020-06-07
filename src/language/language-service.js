@@ -33,13 +33,13 @@ const LanguageService = {
 
   createLinkedList(array, language) {
     let list = new LinkedList();
-    let curr = list.find(word => word.id === language.head);
+    let curr = array.find(word => word.id === language.head);
 
     list.insertLast(curr);
 
     // while(curr.next !== null){
     while (curr.next) {
-      curr = list.find(word => word.id === curr.next);
+      curr = array.find(word => word.id === curr.next);
       list.insertLast(curr);
     }
     return list;
@@ -77,10 +77,10 @@ const LanguageService = {
         .update({ head: curr.value.id });
 
       while (curr) {
-        console.log(curr.next.next);
+        console.log(curr.value.id);
         await trx
           .into("word")
-          .where({ id: curr.next.next.value.id })
+          .where({ id: curr.next.value.id })
           .update({
             next: curr.next ? curr.next.next.value.id : knex.raw("DEFAULT"),
           });
@@ -88,35 +88,7 @@ const LanguageService = {
       }
     });
   },
-  insertWord(db, words, language_id, total_score) {
-    return db
-      .transaction(async trx => {
-        return Promise
-          .all([trx('language')
-            .where({
-              id: language_id
-            })
-            .update({
-              total_score,
-              head: words[0].id
-            }),
-            ...words.map((word, index) => {
-              if (index + 1 >= words.length) {
-                word.next = null;
-                words[index - 1].next = word
-              } else {
-                word.next = words[index + 1].id;
-              }
-              return trx('word').where({
-                id: word.id
-              }).update({
-                ...word
-              })
-            })
-          ])
-
-      })
-  },
+  
 
 };
 

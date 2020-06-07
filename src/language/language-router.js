@@ -137,21 +137,21 @@ languageRouter.get("/head", async (req, res, next) => {
 languageRouter
   .use(requireAuth)
   .route("/guess")
-  .post(jsonBodyParser, (req, res, next) => {
+  .post(jsonBodyParser, async (req, res, next) => {
     const guess = req.body.guess;
     if (!guess) {
       return res.status(400).send({ error: "Missing 'guess' in request body" });
     }
     try {
-      const words =  LanguageService.getLanguageWords(
+      const words = await LanguageService.getLanguageWords(
         req.app.get("db"),
         req.language.id
       );
-      const language = LanguageService.getUsersLanguage(
+      const language = await LanguageService.getUsersLanguage(
         req.app.get("db"),
         req.user.id
       );
-      let list =  LanguageService.createLinkedList(words, language);
+      let list = await LanguageService.createLinkedList(words, language);
       let head = list.head;
       let answer = list.head.value.translation;
       let memory_value = head.value.memory_value;
@@ -178,7 +178,7 @@ languageRouter
         wordCorrectCount: head.value.correct_count,
         wordIncorrectCount: head.value.incorrect_count,
       };
-     LanguageService.updates(
+      await LanguageService.updates(
         req.app.get("db"),
         list,
         req.language.id,
