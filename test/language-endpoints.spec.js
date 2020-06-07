@@ -1,7 +1,7 @@
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('Language Endpoints', function () {
+describe('Language Endpoints', function () {
   let db
 
   const testUsers = helpers.makeUsersArray()
@@ -140,7 +140,7 @@ describe.only('Language Endpoints', function () {
   /**
    * @description Submit a new guess for the language
    **/
-  describe(`POST /api/language/guess`, () => {
+  describe.only(`POST /api/language/guess`, () => {
     const [testLanguage] = testLanguages
     const testLanguagesWords = testWords.filter(
       w => w.language_id === testLanguage.id
@@ -216,7 +216,7 @@ describe.only('Language Endpoints', function () {
         word => word.language_id === testLanguage.id
       )
 
-      it.only(`responds with correct and moves head`, () => {
+      it(`responds with correct and moves head`, () => {
         const correctPostBody = {
           guess: testLanguagesWords[0].translation,
         }
