@@ -138,6 +138,7 @@ languageRouter
   .use(requireAuth)
   .route("/guess")
   .post(jsonBodyParser, async (req, res, next) => {
+    // console.log(req.body.guess,"guess");
     const guess = req.body.guess;
     if (!guess) {
       return res.status(400).send({ error: "Missing 'guess' in request body" });
@@ -155,7 +156,7 @@ languageRouter
       let head = list.head;
       let answer = list.head.value.translation;
       let memory_value = head.value.memory_value;
-
+  
       let isCorrect;
       if (guess === answer) {
         // console.log("guess",guess,"answer", answer,head.value);
@@ -188,9 +189,11 @@ languageRouter
         list,
         req.language.id,
         req.language.total_score
-      );console.log("testing")
+      );
+      console.log("testing")
       res.json( feedback);
-    } catch (error) {console.log(error)
+    } catch (error) {
+      // console.log(error)
       next(error);
     }
   });
