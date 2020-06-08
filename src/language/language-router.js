@@ -152,7 +152,7 @@ languageRouter
         req.app.get("db"),
         req.user.id
       );
-      let list = await LanguageService.createLinkedList(words, language);
+      let list = LanguageService.createLinkedList(words, language);
       let head = list.head;
       let answer = list.head.value.translation;
       let memory_value = head.value.memory_value;
@@ -167,13 +167,16 @@ languageRouter
         console.log(head.value.correct_count)
         memory_value *= 2;
         head.value.memory_value = memory_value;
+        head.value.correct_count+=1;
         list.head = head.next;
-        list.insertAt(head.value, memory_value);
+        list.insertAt(memory_value,head.value);
       } else {
         isCorrect = false;
         head.value.memory_value = 1;
+        head.value.incorrect_count+=1
+        memory_value=1;
         list.head = head.next;
-        list.insertAt(head.value, memory_value);
+        list.insertAt(memory_value,head.value);
       }
       let feedback = {
         answer: answer,

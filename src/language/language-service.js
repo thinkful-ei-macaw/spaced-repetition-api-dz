@@ -76,13 +76,13 @@ const LanguageService = {
         .where({ user_id })
         .update({ head: curr.value.id });
 
-      while (curr && curr.next && curr.next.next) {
+      while (curr) {
         // console.log(curr.next.next);
         await trx
           .into("word")
-          .where({ id: curr.next.next.value.id })
+          .where({ id: curr.value.id })
           .update({
-            next: curr.next ? curr.next.next.value.id : knex.raw("DEFAULT"),
+            next: curr.next ? curr.next.value.id : knex.raw("DEFAULT"),
           });
         curr = curr.next;
       }
