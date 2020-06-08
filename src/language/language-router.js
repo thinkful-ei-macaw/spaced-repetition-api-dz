@@ -158,9 +158,12 @@ languageRouter
 
       let isCorrect;
       if (guess === answer) {
+        // console.log("guess",guess,"answer", answer,head.value);
+
         isCorrect = true;
         req.language.total_score += 1;
         head.value.correct_count += 1;
+        console.log(head.value.correct_count)
         memory_value *= 2;
         head.value.memory_value = memory_value;
         list.head = head.next;
@@ -174,18 +177,20 @@ languageRouter
       let feedback = {
         answer: answer,
         isCorrect: isCorrect,
+        nextWord: head.next.value.original,
         totalScore: req.language.total_score,
         wordCorrectCount: head.value.correct_count,
         wordIncorrectCount: head.value.incorrect_count,
       };
+      console.log(head.next.value.original)
       await LanguageService.updates(
         req.app.get("db"),
         list,
         req.language.id,
         req.language.total_score
-      );
-      res.json( {feedback} );
-    } catch (error) {
+      );console.log("testing")
+      res.json( feedback);
+    } catch (error) {console.log(error)
       next(error);
     }
   });

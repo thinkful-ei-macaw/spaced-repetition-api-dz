@@ -76,16 +76,17 @@ const LanguageService = {
         .where({ user_id })
         .update({ head: curr.value.id });
 
-      while (curr) {
-        console.log(curr.value.id);
+      while (curr && curr.next && curr.next.next) {
+        // console.log(curr.next.next);
         await trx
           .into("word")
-          .where({ id: curr.next.value.id })
+          .where({ id: curr.next.next.value.id })
           .update({
             next: curr.next ? curr.next.next.value.id : knex.raw("DEFAULT"),
           });
         curr = curr.next;
       }
+      // console.log("hello world")
     });
   },
   
