@@ -67,22 +67,26 @@ const LanguageService = {
   },
 
   // write function that takes ll as argument and saves to database
-  updates(db, list, user_id) {
+  updates(db, list, user_id,total_score) {
     return db.transaction(async trx => {
       let curr = list.head;
 
       await trx
         .into("language")
         .where({ user_id })
-        .update({ head: curr.value.id });
+        .update({ head: curr.value.id, total_score });
 
       while (curr) {
-        // console.log(curr.next.next);
+        // console.log(curr,"hey");
         await trx
           .into("word")
           .where({ id: curr.value.id })
           .update({
             next: curr.next ? curr.next.value.id : knex.raw("DEFAULT"),
+            incorrect_count:curr.value.incorrect_count,
+            correct_count:curr.value.correct_count,
+            memory_value:curr.value.memory_value
+      
           });
         curr = curr.next;
       }

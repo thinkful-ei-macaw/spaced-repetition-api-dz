@@ -109,13 +109,13 @@ languageRouter.get("/head", async (req, res, next) => {
 //       };
 
 //       let results = {
-//         nextWord: nextWord, 
-//         totalScore: req.language.total_score, 
-//         wordCorrectCount: correct_count, 
+//         nextWord: nextWord,
+//         totalScore: req.language.total_score,
+//         wordCorrectCount: correct_count,
 //         wordIncorrectCount: list.head.value.incorrect_count,
 //         answer: answer,
 //         isCorrect: isCorrect,
-        
+
 //       };
 
 //       let updateArray = [];
@@ -156,7 +156,7 @@ languageRouter
       let head = list.head;
       let answer = list.head.value.translation;
       let memory_value = head.value.memory_value;
-  
+
       let isCorrect;
       if (guess === answer) {
         // console.log("guess",guess,"answer", answer,head.value);
@@ -164,41 +164,42 @@ languageRouter
         isCorrect = true;
         req.language.total_score += 1;
         head.value.correct_count += 1;
-        console.log(head.value.correct_count)
+        console.log(head.value.correct_count);
         memory_value *= 2;
         head.value.memory_value = memory_value;
-        head.value.correct_count+=1;
         list.head = head.next;
-        list.insertAt(memory_value,head.value);
+        list.insertAt(memory_value, head.value);
       } else {
         isCorrect = false;
         head.value.memory_value = 1;
-        head.value.incorrect_count+=1
-        memory_value=1;
+        head.value.incorrect_count += 1;
+        memory_value = 1;
         list.head = head.next;
-        list.insertAt(memory_value,head.value);
+        list.insertAt(memory_value, head.value);
       }
       let feedback = {
         answer: answer,
         isCorrect: isCorrect,
         nextWord: head.next.value.original,
         totalScore: req.language.total_score,
-        wordCorrectCount: head.value.correct_count,
-        wordIncorrectCount: head.value.incorrect_count,
+        wordCorrectCount: head.next.value.correct_count,
+        wordIncorrectCount: head.next.value.incorrect_count,
       };
-      console.log(head.next.value.original)
+      console.log(head.next.value.original);
       await LanguageService.updates(
         req.app.get("db"),
         list,
         req.language.id,
         req.language.total_score
       );
-      console.log("testing")
-      res.json( feedback);
+      console.log("testing");
+      res.json(feedback);
     } catch (error) {
       // console.log(error)
       next(error);
     }
   });
-  
+
 module.exports = languageRouter;
+
+//correct and incorrect count is displaying data for the next word not the current, displaying the last corr,for the current. Keep them in 2 different variables in the state i.e. current and next word
