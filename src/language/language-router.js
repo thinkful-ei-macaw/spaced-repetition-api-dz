@@ -138,6 +138,7 @@ languageRouter
   .use(requireAuth)
   .route("/guess")
   .post(jsonBodyParser, async (req, res, next) => {
+    
     // console.log(req.body.guess,"guess");
     const guess = req.body.guess;
     if (!guess) {
@@ -158,9 +159,9 @@ languageRouter
       let memory_value = head.value.memory_value;
 
       let isCorrect;
-      if (guess === answer) {
+      if (guess.toLowerCase() === answer.toLowerCase()) {
         // console.log("guess",guess,"answer", answer,head.value);
-
+      
         isCorrect = true;
         req.language.total_score += 1;
         head.value.correct_count += 1;
